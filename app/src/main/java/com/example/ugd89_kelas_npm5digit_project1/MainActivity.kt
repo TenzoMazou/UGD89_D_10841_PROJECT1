@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private var mCameraView: CameraView? = null
     lateinit var sensorStatusTV: TextView
     lateinit var proximitySensor: Sensor
+    private var check:Int = 0;
     lateinit var sensorManager: SensorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,10 +82,9 @@ class MainActivity : AppCompatActivity() {
     var proximitySensorEventListener: SensorEventListener? = object : SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         }
-
         override fun onSensorChanged(event: SensorEvent?) {
             if (event?.sensor?.type == Sensor.TYPE_PROXIMITY) {
-                if (event.values[0] == 0f) {
+                if (event.values[0] == 0f && check == 0) {
                     try {
                         mCamera = openFrontFacingCamera()
                     } catch (e: Exception) {
@@ -98,8 +98,21 @@ class MainActivity : AppCompatActivity() {
                     @SuppressLint("MissingInFlatedId", "LocalSuppress") val imageClose =
                         findViewById<View>(R.id.imgClose) as ImageButton
                     imageClose.setOnClickListener { view: View? -> System.exit(0) }
-
-
+                    check == 1;
+                }else{
+                    try {
+                        mCamera = openBackFacingCamera()
+                    } catch (e: Exception) {
+                        Log.d("error", "Failed to get Camera" + e.message)
+                    }
+                    if (mCamera != null) {
+                        mCameraView = CameraView(this@MainActivity, mCamera!!)
+                        val camera_view = findViewById<View>(R.id.FlCamera) as FrameLayout
+                        camera_view.addView(mCameraView)
+                    }
+                    @SuppressLint("MissingInFlatedId", "LocalSuppress") val imageClose =
+                        findViewById<View>(R.id.imgClose) as ImageButton
+                    imageClose.setOnClickListener { view: View? -> System.exit(0) }
                 }
             }
         }
