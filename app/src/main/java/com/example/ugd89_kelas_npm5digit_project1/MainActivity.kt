@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private var mCameraView: CameraView? = null
     lateinit var sensorStatusTV: TextView
     lateinit var proximitySensor: Sensor
-    private var check:Int = 0;
+    private var open:Int = 0;
     lateinit var sensorManager: SensorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         }
         override fun onSensorChanged(event: SensorEvent?) {
             if (event?.sensor?.type == Sensor.TYPE_PROXIMITY) {
-                if (event.values[0] == 0f && check == 0) {
+                if (event.values[0] == 0f && open == 0) {
                     try {
                         mCamera = openFrontFacingCamera()
                     } catch (e: Exception) {
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                     @SuppressLint("MissingInFlatedId", "LocalSuppress") val imageClose =
                         findViewById<View>(R.id.imgClose) as ImageButton
                     imageClose.setOnClickListener { view: View? -> System.exit(0) }
-                    check == 1;
+                    open == 1;
                 }else{
                     try {
                         mCamera = openBackFacingCamera()
